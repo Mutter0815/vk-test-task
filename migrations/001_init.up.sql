@@ -1,0 +1,19 @@
+CREATE TABLE IF NOT EXISTS users(
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(20) UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS ads(
+id SERIAL PRIMARY KEY,
+user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+title VARCHAR(100) NOT NULL,
+description TEXT NOT NULL,
+image_url VARCHAR(255),
+price INTEGER NOT NULL CHECK(price>0),
+created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_ads_price ON ads(price);
+CREATE INDEX IF NOT EXISTS idx_ads_created_at ON ads (created_at);
